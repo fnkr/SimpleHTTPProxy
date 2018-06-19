@@ -1,0 +1,20 @@
+language: go
+
+go:
+  - stable
+
+script:
+  - go test
+  - GOOS=linux   GOARCH=amd64 go build -o builds/simple-http-proxy_linux-amd64
+  - GOOS=darwin  GOARCH=amd64 go build -o builds/simple-http-proxy_darwin-amd64
+  - GOOS=windows GOARCH=amd64 go build -o builds/simple-http-proxy_windows-amd64.exe
+  - GOOS=freebsd GOARCH=amd64 go build -o builds/simple-http-proxy_freebsd-amd64
+
+deploy:
+  provider: releases
+  api_key: "$GITHUB_TOKEN"
+  file_glob: true
+  file: builds/simple-http-proxy_*
+  skip_cleanup: true
+  on:
+    tags: true
